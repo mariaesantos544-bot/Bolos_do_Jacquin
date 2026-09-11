@@ -1,0 +1,17 @@
+﻿using Bolos_do_Jacquin.Models;
+
+namespace Bolos_do_Jacquin.Interfaces
+{
+    public interface ICategoria
+    {
+        Task Cadastrar(Categoria categoria);
+
+        Task<List<Categoria>> Listar();
+
+        Task Atualizar(Guid id, Categoria categoria);
+
+        Task Deletar(Guid id);
+
+        Task<Categoria?> BuscarPorId(Guid id);
+    }
+}
