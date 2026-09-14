@@ -36,7 +36,7 @@ namespace Bolos_do_Jacquin.Repositories
             }
         }
 
-        public async Task<Produto?> BuscarPorId(Guid id)
+        public async Task<Produto?> ListarPorProduto(Guid id)
         {
             return await _context.Produto
                 .FirstOrDefaultAsync(p => p.IdProduto == id);
@@ -62,7 +62,7 @@ namespace Bolos_do_Jacquin.Repositories
             }
         }
 
-        public async Task<List<Produto>> Listar()
+        public async Task<List<Produto>> ListarTodos()
         {
             return await _context.Produto
                 .AsNoTracking()

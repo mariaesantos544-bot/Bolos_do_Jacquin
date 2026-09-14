@@ -6,12 +6,12 @@ namespace Bolos_do_Jacquin.Interfaces
     {
         Task Cadastrar(Produto produto);
 
-        Task<List<Produto>> Listar();
+        Task<List<Produto>> ListarTodos();
 
         Task Atualizar(Guid id, Produto produto);
 
         Task Deletar(Guid id);
 
-        Task<Produto?> BuscarPorId(Guid id);
+        Task<Produto?> ListarPorProduto(Guid id);
     }
 }

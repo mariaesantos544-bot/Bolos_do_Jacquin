@@ -6,7 +6,7 @@ namespace Bolos_do_Jacquin.Interfaces
     {
         Task Cadastrar(Categoria categoria);
 
-        Task<List<Categoria>> Listar();
+        Task<List<Categoria>> ListarTodos();
 
         Task Atualizar(Guid id, Categoria categoria);
 

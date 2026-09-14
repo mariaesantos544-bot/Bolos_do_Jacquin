@@ -39,31 +39,31 @@ namespace Bolos_do_Jacquin.Repositories
             }
         }
 
-        public async Task<Usuario?> BuscarPorEmailESenha(string email, string senha)
+        public async Task<Usuario?> BuscarPorId(Guid id)
+        {
+            return await _context.Usuario
+                .FirstOrDefaultAsync(u => u.IdUsuario == id);
+        }
+
+        public async Task<Usuario?> BuscarPorEmailESenha(
+            string email,
+            string senha)
         {
             var usuario = await _context.Usuario
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             if (usuario == null)
-            {
                 return null;
-            }
 
             bool senhaValida =
-                Criptografia.CompararHash(senha, usuario.Senha);
+                Criptografia.CompararHash(
+                    senha,
+                    usuario.Senha);
 
             if (!senhaValida)
-            {
                 return null;
-            }
 
             return usuario;
-        }
-
-        public async Task<Usuario?> BuscarPorId(Guid id)
-        {
-            return await _context.Usuario
-                .FirstOrDefaultAsync(u => u.IdUsuario == id);
         }
 
         public async Task Cadastrar(Usuario usuario)
@@ -91,7 +91,7 @@ namespace Bolos_do_Jacquin.Repositories
             }
         }
 
-        public async Task<List<Usuario>> Listar()
+        public async Task<List<Usuario>> ListarTodos()
         {
             return await _context.Usuario
                 .AsNoTracking()

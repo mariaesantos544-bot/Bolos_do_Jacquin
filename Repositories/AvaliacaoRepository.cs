@@ -14,38 +14,58 @@ namespace Bolos_do_Jacquin.Repositories
             _context = context;
         }
 
+        public async Task Atualizar(Guid id, Avaliacao avaliacao)
+        {
+            var AvaliacaoBuscada = await
+                _context.Avaliacao.FindAsync(id);
+
+            if (AvaliacaoBuscada != null)
+            {
+                AvaliacaoBuscada.Nota = avaliacao.Nota;
+                AvaliacaoBuscada.Comentario = avaliacao.Comentario;
+                AvaliacaoBuscada.Situacao = avaliacao.Situacao;
+                AvaliacaoBuscada.MotivoOcultacao = avaliacao.MotivoOcultacao;
+                AvaliacaoBuscada.DataAlteracao = DateTime.Now;
+
+                _context.Avaliacao.Update(AvaliacaoBuscada);
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
         public async Task<Avaliacao?> BuscarPorId(Guid id)
         {
-            return await _context.Avaliacao.FirstOrDefaultAsync(a => a.IdAvaliacao == id);
+            return await _context.Avaliacao
+                .FirstOrDefaultAsync(a => a.IdAvaliacao == id);
         }
 
         public async Task Cadastrar(Avaliacao avaliacao)
         {
             avaliacao.DataCriacao = DateTime.Now;
+
             await _context.Avaliacao.AddAsync(avaliacao);
+
             await _context.SaveChangesAsync();
         }
 
         public async Task Deletar(Guid id)
         {
-            var avaliacao = await _context.Avaliacao.FindAsync(id);
+            var avaliacao = await
+                _context.Avaliacao.FindAsync(id);
+
             if (avaliacao != null)
             {
                 _context.Avaliacao.Remove(avaliacao);
+
                 await _context.SaveChangesAsync();
             }
         }
 
-        public async Task<List<Avaliacao>> Listar()
-        {
-            return await _context.Avaliacao.ToListAsync();
-        }
-
-        public async Task<List<Avaliacao>> ListarPorProduto(Guid idProduto)
+        public async Task<List<Avaliacao>> ListarTodos()
         {
             return await _context.Avaliacao
-                .Where(a => a.IdProduto == idProduto)
                 .ToListAsync();
         }
+
     }
 }

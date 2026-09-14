@@ -10,7 +10,7 @@ namespace Bolos_do_Jacquin.Interfaces
 
         Task Deletar(Guid id);
 
-        Task<List<Usuario>> Listar();
+        Task<List<Usuario>> ListarTodos();
 
         Task<Usuario?> BuscarPorId(Guid id);
 

@@ -55,7 +55,7 @@ namespace Bolos_do_Jacquin.Repositories
             }
         }
 
-        public async Task<List<Categoria>> Listar()
+        public async Task<List<Categoria>> ListarTodos()
         {
             return await _context.Categoria
                 .AsNoTracking()

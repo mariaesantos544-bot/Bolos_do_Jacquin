@@ -8,10 +8,11 @@ namespace Bolos_do_Jacquin.Interfaces
 
         Task Deletar(Guid id);
 
-        Task<List<Avaliacao>> Listar();
-
-        Task<List<Avaliacao>> ListarPorProduto(Guid idProduto);
+        Task<List<Avaliacao>> ListarTodos();
 
         Task<Avaliacao?> BuscarPorId(Guid id);
+
+        Task Atualizar(Guid id, Avaliacao avaliacao);
+
     }
 }

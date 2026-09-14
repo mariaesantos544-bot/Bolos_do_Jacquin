@@ -1,12 +1,15 @@
 ﻿using Bolos_do_Jacquin.DTO;
 using Bolos_do_Jacquin.Interfaces;
 using Bolos_do_Jacquin.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bolos_do_Jacquin.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class CategoriaController : ControllerBase
     {
         private readonly ICategoria _categoria;
@@ -17,6 +20,7 @@ namespace Bolos_do_Jacquin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Cadastrar([FromBody] CategoriaDTO dto)
         {
             try
@@ -37,6 +41,7 @@ namespace Bolos_do_Jacquin.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Atualizar(
             Guid id,
             [FromBody] CategoriaDTO dto)
@@ -59,6 +64,7 @@ namespace Bolos_do_Jacquin.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [Authorize(Roles = "Administrador, Cliente")]
         public async Task<IActionResult> BuscarPorId(Guid id)
         {
             var categoriaBuscada = await _categoria.BuscarPorId(id);
@@ -72,11 +78,12 @@ namespace Bolos_do_Jacquin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrador, Cliente")]
         public async Task<IActionResult> Listar()
         {
             try
             {
-                var categorias = await _categoria.Listar();
+                var categorias = await _categoria.ListarTodos();
 
                 return Ok(categorias);
             }
@@ -87,6 +94,7 @@ namespace Bolos_do_Jacquin.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Deletar(Guid id)
         {
             await _categoria.Deletar(id);

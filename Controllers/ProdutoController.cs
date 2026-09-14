@@ -1,12 +1,15 @@
 ﻿using Bolos_do_Jacquin.DTO;
 using Bolos_do_Jacquin.Interfaces;
 using Bolos_do_Jacquin.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bolos_do_Jacquin.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class ProdutoController : ControllerBase
     {
         private readonly IProduto _produto;
@@ -17,6 +20,7 @@ namespace Bolos_do_Jacquin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Cadastrar([FromBody] ProdutoDTO dto)
         {
             try
@@ -44,6 +48,7 @@ namespace Bolos_do_Jacquin.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Atualizar(
             Guid id,
             [FromBody] ProdutoDTO dto)
@@ -73,9 +78,10 @@ namespace Bolos_do_Jacquin.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> BuscarPorId(Guid id)
+        [Authorize(Roles = "Administrador, Cliente")]
+        public async Task<IActionResult> ListarPorProduto(Guid id)
         {
-            var produtoBuscado = await _produto.BuscarPorId(id);
+            var produtoBuscado = await _produto.ListarPorProduto(id);
 
             if (produtoBuscado == null)
             {
@@ -86,11 +92,12 @@ namespace Bolos_do_Jacquin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Listar()
+        [Authorize(Roles = "Administrador, Cliente")]
+        public async Task<IActionResult> ListarTodos()
         {
             try
             {
-                var produtos = await _produto.Listar();
+                var produtos = await _produto.ListarTodos();
 
                 return Ok(produtos);
             }
@@ -101,6 +108,7 @@ namespace Bolos_do_Jacquin.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Deletar(Guid id)
         {
             await _produto.Deletar(id);

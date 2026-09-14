@@ -1,12 +1,15 @@
 ﻿using Bolos_do_Jacquin.DTO;
 using Bolos_do_Jacquin.Interfaces;
 using Bolos_do_Jacquin.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bolos_do_Jacquin.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuario _usuario;
@@ -16,7 +19,9 @@ namespace Bolos_do_Jacquin.Controllers
             _usuario = usuario;
         }
 
+
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Cadastrar([FromBody] UsuarioDTO dto)
         {
             try
@@ -42,6 +47,7 @@ namespace Bolos_do_Jacquin.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [Authorize(Roles = "Administrador, Cliente")]
         public async Task<IActionResult> Atualizar(Guid id, [FromBody] UsuarioDTO dto)
         {
             try
@@ -66,6 +72,7 @@ namespace Bolos_do_Jacquin.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> BuscarPorId(Guid id)
         {
             var usuarioBuscado = await _usuario.BuscarPorId(id);
@@ -79,11 +86,12 @@ namespace Bolos_do_Jacquin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Listar()
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> ListarTodos()
         {
             try
             {
-                var usuarios = await _usuario.Listar();
+                var usuarios = await _usuario.ListarTodos();
 
                 return Ok(usuarios);
             }
@@ -94,6 +102,7 @@ namespace Bolos_do_Jacquin.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Deletar(Guid id)
         {
             await _usuario.Deletar(id);
